@@ -6,7 +6,7 @@ from .utils import EnsureCorotineMethod
 
 
 class AbstractPublisher(metaclass=EnsureCorotineMethod):
-    __coroutines__ = ['parse_request', 'prepare_response', 'fallback',]
+    __coroutines__ = ['parse_request', 'prepare_response', 'fallback']
 
     async def parse_request(self, request):
         ''' parse raw request

@@ -3,13 +3,13 @@
 __all__ = ['RTBServer']
 
 import copy
-import logging
 
 import asyncio
 from aiohttp.web import Application, Response
 
 from .publisher import AbstractPublisher
 from .aution import AbstractAutionPolicy
+from .log import logger
 
 
 class RTBServer(object):
@@ -60,10 +60,10 @@ class RTBServer(object):
             try:
                 resp = await publisher.fallback(e)
             except Exception as e:
-                logging.exception("Even Error when fallback")
+                logger.exception("Error During Fallback")
                 resp = Response(status=500)
             else:
-                logging.exception("Error which has been fallback")
+                logger.exception("Error which has been lucky fallback")
 
         return resp
 
@@ -92,7 +92,7 @@ class RTBServer(object):
             except asyncio.CancelledError:
                 pass
             except Exception:
-                logging.exception('bidder %s' % bidder)
+                logger.exception('Bidder Exception')
 
         # We in fact need to do nothing to the pending futures since
         # python3 gc will collect them
@@ -111,7 +111,7 @@ class RTBServer(object):
         srv = loop.create_server(handler, host=host, port=port)
         srv = loop.run_until_complete(srv)
 
-        print('serving on', srv.sockets[0].getsockname())
+        logger.info('serving on {}'.format(srv.sockets[0].getsockname()))
         try:
             loop.run_forever()
         except KeyboardInterrupt:

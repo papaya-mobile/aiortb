@@ -30,7 +30,6 @@ class DummyPublisher(AbstractPublisher):
         return Response(status=200, text='fallback')
 
 
-
 class DummyBidder(AbstractBidder):
     async def bid(self, request):
         if random.random() < 0.1:
