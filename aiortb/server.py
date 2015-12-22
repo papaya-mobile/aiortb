@@ -6,6 +6,7 @@ import copy
 
 import asyncio
 from aiohttp.web import Application, Response
+from aiohttp import hdrs
 
 from .publisher import AbstractPublisher
 from .aution import AbstractAutionPolicy
@@ -13,7 +14,9 @@ from .log import logger
 
 
 class RTBServer(object):
-    def __init__(self):
+    def __init__(self, name='', openrtb_version=''):
+        self.name = name or 'aiortb'
+        self.openrtb_version = openrtb_version
 
         self._publishers = {}
         self._bidders = []
@@ -65,6 +68,10 @@ class RTBServer(object):
             else:
                 logger.exception("Error which has been lucky fallback")
 
+        resp.headers[hdrs.SERVER] = self.name
+        if self.openrtb_version:
+            resp.headers[hdrs.upstr('x-openrtb-version')] = \
+                self.openrtb_version
         return resp
 
     async def _broadcast(self, request):

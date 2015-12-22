@@ -53,7 +53,7 @@ class RandomAutionPolicy(AbstractAutionPolicy):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
 
-    server = RTBServer()
+    server = RTBServer('Dummy/0.1', '2.3')
     server.add_publisher('dummy', '/', 'POST', DummyPublisher)
     server.add_bidder(DummyBidder)
     server.add_bidder(DummyBidder)
